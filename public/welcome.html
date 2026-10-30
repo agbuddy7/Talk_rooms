@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="One stream. A thousand reactions. Find your people with SideChat, temporary viewer rooms built around live stream moments." />
+  <title>SideChat · Same stream. Your people.</title>
+  <link rel="stylesheet" href="/welcome.css" />
+  <script src="/welcome.js" defer></script>
+</head>
+<body id="top">
+  <a class="skip" href="#how">Skip to how it works</a>
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#top"><span class="brand-icon">▦</span>sidechat<span class="brand-dot">.</span></a>
+    <a href="#how">How it works</a><a href="#moments">The moments</a><a class="nav-action" href="/">Try the lab ↗</a>
+  </nav>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pixel"></span> A SOCIAL LAYER FOR LIVE STREAMS</p>
+        <h1>Same stream.<br />Same <span class="reaction-word">reaction.</span><br /><em>Your people.</em></h1>
+        <p class="intro">Chat flies by. A moment hits. Someone out there feels exactly like you. <strong>SideChat helps you find them.</strong></p>
+        <a class="button primary" href="#demo"><span>▶</span> See a moment unfold</a>
+        <a class="quiet-link" href="#how">Meet your next side conversation ↓</a>
+      </div>
+      <div class="demo-stage" id="demo">
+        <div class="stage-label"><span class="pixel"></span> AN ILLUSTRATIVE MOMENT <span>INTERACTIVE DEMO</span></div>
+        <div class="demo-window">
+          <div class="window-top"><span><i></i> LIVE MOMENT</span><span class="demo-mode">FICTIONAL CHAT</span></div>
+          <div class="game-scene" aria-label="Illustrated character selection screen">
+            <div class="scene-grid"></div><span class="scene-label">THE CHOICE IS MADE.</span>
+            <div class="characters"><div class="character brim"><span class="sprite">♜</span><b>BRIM</b></div><div class="vs">VS</div><div class="character nova selected"><span class="sprite">✦</span><b>NOVA</b><small>SELECTED</small></div></div>
+            <div class="scene-bottom"><span>QUEST / CHAPTER 04</span><span>STREAM CONTINUES →</span></div>
+          </div>
+          <div class="chat-simulation" id="demo-chat" aria-live="polite"></div>
+          <div class="demo-invitation" id="demo-invitation" hidden>
+            <div class="invite-heading"><span class="green-dot"></span> YOUR SIDE OF CHAT <small>INVITE ONLY</small></div>
+            <h3>Justice for Brim</h3><p>Found a few people who wanted that ending too.</p>
+            <div class="avatar-row"><span>M</span><span>K</span><span>Z</span><span>+1</span><small>4 viewers · same stream</small></div>
+            <button class="button mint" id="demo-join">Join the side conversation ↗</button>
+          </div>
+          <div class="demo-room" id="demo-room" hidden><div class="invite-heading">JUSTICE FOR BRIM <button id="demo-leave" aria-label="Leave example room">✕</button></div><p><b>maya</b> We missed an entire secret ending 😭</p><p><b>kai</b> finally, my people.</p><p class="demo-you" id="demo-you" hidden><b>you</b> Brim deserved better.</p><button class="button mint" id="demo-send">Say “Brim deserved better.” ↗</button></div>
+          <div class="demo-footer"><span id="demo-status">01 / THE MOMENT</span><button id="demo-replay">Replay moment ↻</button></div>
+        </div>
+        <p class="demo-caption">A staged example. Real rooms form from what viewers write in chat.</p>
+      </div>
+    </section>
+    <div class="ticker" aria-hidden="true"><div>ONE STREAM <span>✦</span> A THOUSAND REACTIONS <span>✦</span> FIND YOUR PEOPLE <span>✦</span> ONE STREAM <span>✦</span> A THOUSAND REACTIONS <span>✦</span> FIND YOUR PEOPLE <span>✦</span></div></div>
+    <section class="how section" id="how">
+      <div class="section-intro"><p class="eyebrow">NO SEARCHING. NO AWKWARD INTRODUCTIONS.</p><h2>A moment.<br />A match.<br /><em>A sidechat.</em></h2><p>You’re already part of the conversation.<br />We just make it a little smaller.</p></div>
+      <div class="steps">
+        <article class="step"><span class="step-number">01</span><div class="step-symbol">▤</div><h3>Be yourself in chat.</h3><p>The clutch. The questionable pick. The plot twist nobody asked for. React as you normally would.</p><div class="mini-chat"><b>zoe</b> tell me i'm not the only one who wanted Brim</div></article>
+        <article class="step"><span class="step-number">02</span><div class="step-symbol">⌘</div><h3>Find a shared wavelength.</h3><p>SideChat picks up a specific topic and the people reacting to it. A burst of emojis alone won’t cut it.</p><div class="match-line"><span>M</span><i></i><span>K</span><i></i><span>Z</span><small>SHARED MOMENT FOUND</small></div></article>
+        <article class="step"><span class="step-number">03</span><div class="step-symbol">↗</div><h3>Take it to the side.</h3><p>Get an invitation over the stream. Join a small, temporary room and keep watching together. Always your choice.</p><a class="step-link" href="#demo">Try the example ↑</a></article>
+      </div>
+    </section>
+    <section class="moments section" id="moments"><div class="section-title"><div><p class="eyebrow">THE STREAM CHANGES. SO DOES THE CONVERSATION.</p><h2>There’s a room<br />for <em>that feeling.</em></h2></div><p>Not permanent servers. Not another group to manage.<br />Just the right people, for right now.</p></div>
+      <div class="moment-tabs" role="tablist" aria-label="Example reactions"><button role="tab" aria-selected="true" data-moment="plot">The plot twist</button><button role="tab" aria-selected="false" data-moment="clutch">The clutch</button><button role="tab" aria-selected="false" data-moment="choice">The questionable choice</button></div>
+      <div class="moment-card"><div class="moment-art" id="moment-art" aria-hidden="true">!?</div><div class="moment-copy" role="tabpanel" id="moment-panel"><span class="eyebrow">EXAMPLE ROOM / 01</span><h3 id="moment-title">We need to talk<br />about that ending.</h3><p id="moment-description">The credits roll. Your jaw is still on the floor. Find the other viewers connecting the same dots.</p><span class="room-stamp" id="moment-stamp">THE ENDING DEBRIEF ↗</span></div></div>
+    </section>
+    <section class="consent section"><span class="consent-star" aria-hidden="true">✳</span><div><p class="eyebrow">SMALL ROOMS. YOUR RULES.</p><h2>An invitation.<br /><em>Never an obligation.</em></h2><p>Joining is optional. Leave whenever. Dismiss an invite, mute a topic, or report a room. Conversations expire, so the next moment can have its own space.</p><div class="consent-tags"><span>✓ Invitation only</span><span>✓ Same stream</span><span>✓ Temporary by design</span></div></div></section>
+    <section class="faq section"><p class="eyebrow">A FEW THINGS YOU MIGHT BE WONDERING</p><h2>Good questions.</h2><details><summary>Does this replace the main chat?<span>+</span></summary><p>No. Keep chatting in the stream as usual. SideChat adds a small conversation around a shared moment while the main chat keeps moving.</p></details><details><summary>Do I get joined automatically?<span>+</span></summary><p>Never. You choose whether to accept each invitation. You can also dismiss it or mute the topic.</p></details><details><summary>Why do I need to share my identity?<span>+</span></summary><p>With your permission, Twitch confirms which chat messages belong to you so SideChat can deliver your invitations. The Extension asks you to link your identity before matching invitations.</p></details><details><summary>Can I install it right now?<span>+</span></summary><p>SideChat is currently a hackathon prototype. You can explore the Signal Lab and interactive example; public Extension installation is not available yet.</p><a href="/">Open the Signal Lab ↗</a></details></section>
+  </main>
+  <footer><p class="eyebrow">YOU'RE ALREADY WATCHING TOGETHER.</p><h2>Now find your<br /><em>side of chat.</em></h2><a class="button primary" href="/">Explore the Signal Lab ↗</a><div class="footer-bottom"><span>SIDECHAT / BUILT WITH CODEX</span><a href="#top">Back to top ↑</a><span>Independent prototype. Not endorsed by Twitch.</span></div><div class="footer-word" aria-hidden="true">sidechat.</div></footer>
+</body>
+</html>

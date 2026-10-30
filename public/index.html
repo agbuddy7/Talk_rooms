@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SideChat Signal Lab</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main id="lab-dashboard">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">SIDECHAT · SIGNAL LAB</p>
+          <h1>Find the conversation<br />inside the noise.</h1>
+          <p class="lede">A low-latency prototype for detecting meaningful topics in fast Twitch chat.</p>
+        </div>
+        <div id="input-status" class="live-pill"><span></span><b>Replay input</b></div>
+      </header>
+
+      <section class="controls panel">
+        <div>
+          <p class="label">Replay a chat moment</p>
+          <div id="scenario-buttons" class="button-row"></div>
+        </div>
+        <div class="viewer-picker">
+          <label class="label" for="viewer-select">Preview as invited viewer</label>
+          <select id="viewer-select" disabled><option>Waiting for invitations</option></select>
+        </div>
+        <button id="reset" class="ghost">Reset stream</button>
+      </section>
+
+      <section id="metrics" class="metrics"></section>
+
+      <section class="workspace">
+        <article class="panel topics-panel">
+          <div class="section-heading">
+            <div><p class="label">Detected signals</p><h2>Live topics</h2></div>
+            <span id="generated-at" class="timestamp"></span>
+          </div>
+          <div id="topics" class="topics empty-state">Waiting for a meaningful conversation…</div>
+          <div class="rooms-heading"><p class="label">Same-topic matching</p><h2>Room invitations</h2></div>
+          <div id="rooms" class="rooms empty-rooms">Trends can appear above; rooms require sustained, detailed discussion from several viewers.</div>
+        </article>
+
+        <aside class="panel feed-panel">
+          <div class="section-heading">
+            <div><p class="label">Rolling window</p><h2>Chat feed</h2></div>
+          </div>
+          <div id="feed" class="feed"></div>
+        </aside>
+      </section>
+    </main>
+    <section id="identity-gate" class="identity-gate hidden" aria-live="polite">
+      <div class="identity-mark">S</div>
+      <div>
+        <p class="label">SideChat identity</p>
+        <h2>Connect to find your people</h2>
+        <p>Share your Twitch identity so invitations can be matched to messages you wrote in this stream.</p>
+      </div>
+      <button id="share-identity" type="button">Connect Twitch identity</button>
+      <small>SideChat only uses identity for invitation matching. Joining is always optional.</small>
+    </section>
+    <aside id="invitation-floater" class="invitation-floater hidden" aria-live="polite">
+      <div class="invite-signal"><span></span><b>Room found</b><small id="invite-expiry"></small></div>
+      <p id="invite-reason" class="invite-reason">People in this stream reacted like you</p>
+      <h2 id="invite-title">A live moment</h2>
+      <p id="invite-topic" class="invite-topic"></p>
+      <div class="invite-proof">
+        <span id="invite-members">0 viewers</span>
+        <span>same stream</span>
+        <span>invite only</span>
+      </div>
+      <div class="invite-actions">
+        <button id="accept-invite" type="button">Join the room</button>
+        <button id="dismiss-invite" class="ghost" type="button">Not now</button>
+      </div>
+    </aside>
+    <section id="chatroom" class="chatroom hidden" aria-label="SideChat room">
+      <header class="chatroom-header">
+        <div><p class="label">Temporary SideChat</p><h2 id="chatroom-title">Room</h2></div>
+        <div class="chatroom-controls">
+          <button id="leave-room" class="ghost compact" type="button">Leave</button>
+          <button id="close-chatroom" class="ghost compact" type="button">Close</button>
+        </div>
+      </header>
+      <p id="chatroom-context" class="chatroom-context"></p>
+      <div class="safety-row">
+        <span>Invitation only · expires automatically</span>
+        <button id="mute-topic" class="text-button" type="button">Mute topic</button>
+        <button id="report-room" class="text-button danger" type="button">Report</button>
+      </div>
+      <div id="room-messages" class="room-messages"></div>
+      <p id="chatroom-error" class="chatroom-error"></p>
+      <form id="room-form" class="room-form">
+        <input id="room-input" maxlength="280" autocomplete="off" placeholder="Message this room…" />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+    <dialog id="report-dialog" class="report-dialog">
+      <form id="report-form" method="dialog">
+        <p class="label">Safety report</p>
+        <h2>What is wrong with this room?</h2>
+        <p>Reporting also hides this topic for ten minutes.</p>
+        <label><input type="radio" name="reason" value="harassment" required /> Harassment or bullying</label>
+        <label><input type="radio" name="reason" value="hate" /> Hate or abusive content</label>
+        <label><input type="radio" name="reason" value="sexual" /> Sexual content</label>
+        <label><input type="radio" name="reason" value="spam" /> Spam or meaningless match</label>
+        <label><input type="radio" name="reason" value="unsafe" /> Unsafe behavior</label>
+        <label><input type="radio" name="reason" value="other" /> Something else</label>
+        <p id="report-error" class="chatroom-error"></p>
+        <div class="dialog-actions">
+          <button id="cancel-report" class="ghost" type="button">Cancel</button>
+          <button type="submit">Submit report</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

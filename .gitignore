@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Local environment and credentials (keep the safe template)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+
+# Runtime data, downloaded models, caches, and logs
+.cache/
+.huggingface/
+models/
+logs/
+*.log
+*.pid
+*.pid.lock
+
+# Generated output and test artifacts
+coverage/
+dist/
+build/
+test-results/
+playwright-report/
+*.zip
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
