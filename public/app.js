@@ -26,6 +26,8 @@ const reportError = document.querySelector("#report-error");
 const pageParameters = new URLSearchParams(window.location.search);
 const extensionMode = Boolean(window.Twitch?.ext?.onAuthorized &&
   (pageParameters.has("anchor") || pageParameters.get("extensionMode") === "1"));
+const configuredApiBase = document.querySelector('meta[name="sidechat-api-base"]')?.content.trim().replace(/\/$/, "") ?? "";
+const apiUrl = (path) => extensionMode && configuredApiBase ? configuredApiBase + path : path;
 let extensionToken = null;
 let extensionIdentity = null;
 let lastState = null;
@@ -61,7 +63,7 @@ function viewerBody(extra = {}) {
 }
 
 async function roomAction(roomId, action, body = {}) {
-  const response = await fetch("/api/rooms/" + encodeURIComponent(roomId) + "/" + action, {
+  const response = await fetch(apiUrl("/api/rooms/" + encodeURIComponent(roomId) + "/" + action), {
     method: "POST", headers: requestHeaders(), body: JSON.stringify(viewerBody(body))
   });
   const result = await response.json();
@@ -206,7 +208,7 @@ async function joinAndOpen(roomId) {
 }
 
 async function loadScenarios() {
-  const scenarios = await fetch("/api/scenarios").then((response) => response.json());
+  const scenarios = await fetch(apiUrl("/api/scenarios")).then((response) => response.json());
   scenarioButtonsElement.innerHTML = scenarios.map((scenario) =>
     '<button data-scenario="' + escapeHtml(scenario.id) + '">' + escapeHtml(scenario.name) + "</button>"
   ).join("");
@@ -214,7 +216,7 @@ async function loadScenarios() {
 
 async function loadViewerState() {
   if (!extensionToken || !extensionIdentity?.linked) return;
-  const response = await fetch("/api/viewer/state", { headers: requestHeaders() });
+  const response = await fetch(apiUrl("/api/viewer/state"), { headers: requestHeaders() });
   const state = await response.json();
   if (!response.ok) {
     identityGate.classList.remove("hidden");
@@ -227,7 +229,7 @@ async function loadViewerState() {
 function initializeExtension() {
   window.Twitch.ext.onAuthorized(async (auth) => {
     extensionToken = auth.token;
-    const response = await fetch("/api/identity", { headers: requestHeaders() });
+    const response = await fetch(apiUrl("/api/identity"), { headers: requestHeaders() });
     const identity = await response.json();
     if (!response.ok) {
       identityGate.querySelector("p:not(.label)").textContent = identity.error ?? "Extension identity is unavailable.";
@@ -243,7 +245,7 @@ function initializeExtension() {
 
 scenarioButtonsElement.addEventListener("click", async (event) => {
   const id = event.target.dataset.scenario;
-  if (id) await fetch("/api/simulate/" + encodeURIComponent(id), { method: "POST" });
+  if (id) await fetch(apiUrl("/api/simulate/" + encodeURIComponent(id)), { method: "POST" });
 });
 
 viewerSelect.addEventListener("change", () => {
@@ -339,7 +341,7 @@ document.querySelector("#share-identity").addEventListener("click", () => {
 document.querySelector("#reset").addEventListener("click", () => {
   openRoomId = null;
   chatroomElement.classList.add("hidden");
-  fetch("/api/reset", { method: "POST" });
+  fetch(apiUrl("/api/reset"), { method: "POST" });
 });
 
 setInterval(() => {
@@ -366,5 +368,5 @@ if (extensionMode) {
     render(lastState);
   });
   await loadScenarios();
-  render(await fetch("/api/state").then((response) => response.json()));
+  render(await fetch(apiUrl("/api/state")).then((response) => response.json()));
 }

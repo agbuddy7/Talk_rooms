@@ -8,9 +8,19 @@ import { ChatroomService } from "../src/chatroom-service.js";
 import { TwitchEventSubAdapter, mapTwitchChatEvent } from "../src/twitch-eventsub-adapter.js";
 import { analyzeWithLlm, resolveLlmConfiguration } from "../src/llm-analyzer.js";
 import { createExtensionToken, verifyExtensionJwt } from "../src/extension-auth.js";
+import { isAllowedCorsOrigin, parseAllowedOrigins } from "../src/cors.js";
 import { replayScenario, scenarios } from "../src/scenarios.js";
 
 const options = { embedder: new HashingEmbedder(), minUniqueViewers: 3, minMessages: 4, similarityThreshold: 0.12, hotThreshold: 0.4 };
+
+test("allows Twitch Extension CORS origins and supports an exact allowlist", () => {
+  assert.equal(isAllowedCorsOrigin("https://abc123.ext-twitch.tv"), true);
+  assert.equal(isAllowedCorsOrigin("https://evil.example.com"), false);
+  const configured = parseAllowedOrigins("https://one.ext-twitch.tv, https://two.ext-twitch.tv");
+  assert.deepEqual(configured, ["https://one.ext-twitch.tv", "https://two.ext-twitch.tv"]);
+  assert.equal(isAllowedCorsOrigin("https://one.ext-twitch.tv", configured), true);
+  assert.equal(isAllowedCorsOrigin("https://abc123.ext-twitch.tv", configured), false);
+});
 
 test("filters emote storms without producing a topic", async () => {
   const detector = new HotTopicDetector(options);

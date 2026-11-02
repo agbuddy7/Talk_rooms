@@ -10,6 +10,7 @@ import { ChatroomService } from "./chatroom-service.js";
 import { verifyExtensionJwt } from "./extension-auth.js";
 import { TwitchEventSubAdapter } from "./twitch-eventsub-adapter.js";
 import { replayScenario, scenarios } from "./scenarios.js";
+import { isAllowedCorsOrigin, parseAllowedOrigins } from "./cors.js";
 
 const inputMode = String(process.env.CHAT_INPUT_MODE ?? "replay").toLowerCase();
 const liveInput = inputMode === "twitch";
@@ -18,6 +19,7 @@ const llmEnabled = Boolean(llmConfiguration.apiKey);
 const extensionSecret = String(process.env.TWITCH_EXTENSION_SECRET ?? "").trim();
 const previewIdentityEnabled = process.env.ALLOW_PREVIEW_IDENTITY === "true" || !extensionSecret;
 const signalLabEnabled = process.env.ENABLE_SIGNAL_LAB === "true" || !extensionSecret;
+const allowedCorsOrigins = parseAllowedOrigins(process.env.TWITCH_EXTENSION_ORIGINS);
 const ignoredTokens = [process.env.TWITCH_BROADCASTER_LOGIN].filter(Boolean);
 const detector = new HotTopicDetector(liveInput ? {
   ignoredAnchors: ignoredTokens,
@@ -82,6 +84,17 @@ const mimeTypes = {
 function sendJson(response, status, data) {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
   response.end(JSON.stringify(data));
+}
+
+function applyCors(request, response) {
+  const origin = request.headers.origin;
+  if (!origin || !isAllowedCorsOrigin(origin, allowedCorsOrigins)) return false;
+  response.setHeader("Access-Control-Allow-Origin", origin);
+  response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.setHeader("Access-Control-Allow-Headers", "Content-Type, x-extension-jwt");
+  response.setHeader("Access-Control-Max-Age", "600");
+  response.setHeader("Vary", "Origin");
+  return true;
 }
 
 async function readJson(request) {
@@ -161,6 +174,14 @@ setInterval(() => void publishState(), 250).unref();
 
 export const server = createServer(async (request, response) => {
   const url = new URL(request.url, `http://${request.headers.host}`);
+  const corsAllowed = applyCors(request, response);
+
+  if (request.method === "OPTIONS") {
+    if (!corsAllowed) return sendJson(response, 403, { error: "Origin is not allowed" });
+    response.writeHead(204);
+    response.end();
+    return;
+  }
 
   if (request.method === "GET" && url.pathname === "/api/state") {
     if (!signalLabEnabled) return sendJson(response, 403, { error: "Signal Lab is disabled in Extension mode" });
@@ -268,7 +289,7 @@ export const server = createServer(async (request, response) => {
     if (filePath.startsWith(publicDirectory) && existsSync(filePath)) {
       response.writeHead(200, {
         "Content-Type": mimeTypes[extname(filePath)] ?? "application/octet-stream",
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://extension-files.twitch.tv; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors https://*.twitch.tv https://*.ext-twitch.tv",
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://extension-files.twitch.tv; style-src 'self'; connect-src 'self' https://talk-rooms-6x2v.onrender.com; img-src 'self' data:; frame-ancestors https://*.twitch.tv https://*.ext-twitch.tv",
         "Referrer-Policy": "no-referrer",
         "X-Content-Type-Options": "nosniff"
       });
